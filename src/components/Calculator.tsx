@@ -535,7 +535,7 @@ export function Calculator() {
                 {/* Result */}
                 <div aria-live="polite" aria-atomic="true">
                   <AnimatePresence mode="wait">
-                    {hariMBG !== null && smartUnit !== null && (
+                    {hariMBG !== null && smartUnit !== null ? (
                       <motion.div
                         key={resultKey}
                         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }}
@@ -552,7 +552,14 @@ export function Calculator() {
                           shouldReduceMotion={shouldReduceMotion ?? false}
                         />
                       </motion.div>
-                    )}
+                    ) : amount === 0 ? (
+                      <p
+                        className="py-4 text-center text-sm"
+                        style={{ color: "var(--color-text-faint)" }}
+                      >
+                        Ketik angka atau pilih salah satu di atas
+                      </p>
+                    ) : null}
                   </AnimatePresence>
                 </div>
 
@@ -651,7 +658,7 @@ export function Calculator() {
                 {/* Result */}
                 <div aria-live="polite" aria-atomic="true">
                   <AnimatePresence mode="wait">
-                    {salaryStats !== null && salary > 0 && (
+                    {salaryStats !== null && salary > 0 ? (
                       <motion.div
                         key={salaryResultKey}
                         initial={shouldReduceMotion ? undefined : { opacity: 0, y: 12 }}
@@ -667,7 +674,14 @@ export function Calculator() {
                           shouldReduceMotion={shouldReduceMotion ?? false}
                         />
                       </motion.div>
-                    )}
+                    ) : salary === 0 ? (
+                      <p
+                        className="py-4 text-center text-sm"
+                        style={{ color: "var(--color-text-faint)" }}
+                      >
+                        Masukkan gajimu
+                      </p>
+                    ) : null}
                   </AnimatePresence>
                 </div>
 

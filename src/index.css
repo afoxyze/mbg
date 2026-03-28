@@ -53,16 +53,6 @@ body {
   }
 }
 
-/* ─── Heat shimmer animation (drives feTurbulence baseFrequency in SVG filter) ─── */
-
-/* Nudges the SVG filter's animate element — actual frequency change is in the SVG */
-@keyframes shimmer-drift {
-  0%   { opacity: 0.8; }
-  33%  { opacity: 1; }
-  66%  { opacity: 0.85; }
-  100% { opacity: 0.8; }
-}
-
 /* Warm glow pulse — scale + opacity breathe, ~4s cycle */
 @keyframes glow-pulse {
   0%, 100% { transform: scale(1);    opacity: 1; }

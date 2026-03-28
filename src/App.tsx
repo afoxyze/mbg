@@ -30,7 +30,7 @@ function SectionDivider() {
 }
 
 export default function App() {
-  const { totalSpent, initialTotalSpent, elapsed, burnRates, phaseLabel } = useTicker();
+  const { initialTotalSpent, elapsed, burnRates, phaseLabel } = useTicker();
   const { isDark, toggleTheme } = useTheme();
 
   return (
@@ -65,7 +65,6 @@ export default function App() {
         <Header phaseLabel={phaseLabel} />
 
         <HeroTicker
-          totalSpent={totalSpent}
           initialTotalSpent={initialTotalSpent}
           elapsed={elapsed}
           dailyBudget={activePhase.dailyBudget}
@@ -105,23 +104,19 @@ export default function App() {
                 href="https://afoxyze.dev"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="footer-link"
+                className="transition-colors duration-150"
+                style={{ color: "var(--color-text-muted)", textDecoration: "none" }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-accent)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-text-muted)";
+                }}
               >
                 afoxyze.dev
               </a>
             </p>
           </div>
-
-          <style>{`
-            .footer-link {
-              color: var(--color-text-muted);
-              text-decoration: none;
-              transition: color 0.15s ease;
-            }
-            .footer-link:hover {
-              color: var(--color-accent);
-            }
-          `}</style>
         </footer>
       </main>
 

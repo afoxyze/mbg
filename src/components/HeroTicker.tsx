@@ -5,7 +5,6 @@ import type { ElapsedTime } from "../hooks/useTicker";
 import { useExchangeRate } from "../hooks/useExchangeRate";
 
 interface HeroTickerProps {
-  readonly totalSpent: number;
   readonly initialTotalSpent: number;
   readonly elapsed: ElapsedTime;
   readonly dailyBudget: number;
@@ -150,7 +149,6 @@ const FireBackground = memo(function FireBackground({ reduced }: { readonly redu
 });
 
 export function HeroTicker({
-  totalSpent: _totalSpent,
   initialTotalSpent,
   elapsed,
   dailyBudget,
