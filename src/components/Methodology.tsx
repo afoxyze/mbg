@@ -1,5 +1,10 @@
 import { useState, useRef } from "react";
-import { motion, AnimatePresence, useInView, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useInView,
+  useReducedMotion,
+} from "framer-motion";
 
 interface FaqItem {
   readonly id: string;
@@ -14,9 +19,9 @@ const FAQ_ITEMS: readonly FaqItem[] = [
     answer: (
       <>
         <p>
-          Data anggaran MBG bersumber dari dokumen resmi APBN 2025 dan RAPBN 2026 yang
-          dipublikasikan oleh Kementerian Keuangan Republik Indonesia, serta laporan
-          resmi dari Badan Gizi Nasional (BGN).
+          Data anggaran MBG bersumber dari dokumen resmi APBN 2025 dan RAPBN
+          2026 yang dipublikasikan oleh Kementerian Keuangan Republik Indonesia,
+          serta laporan resmi dari Badan Gizi Nasional (BGN).
         </p>
         <ul className="mt-3 flex flex-col gap-1.5">
           <li>
@@ -69,8 +74,8 @@ const FAQ_ITEMS: readonly FaqItem[] = [
     answer: (
       <>
         <p>
-          Total anggaran tahunan dibagi rata per hari, kemudian diturunkan ke per jam,
-          menit, dan detik.
+          Total anggaran tahunan dibagi rata per hari, kemudian diturunkan ke
+          per jam, menit, dan detik.
         </p>
         <ul className="mt-3 flex flex-col gap-2">
           <li className="calc-row">
@@ -83,8 +88,8 @@ const FAQ_ITEMS: readonly FaqItem[] = [
           </li>
         </ul>
         <p className="mt-3">
-          Ticker menghitung total akumulasi sejak program dimulai pada 6 Januari 2025,
-          dengan laju yang menyesuaikan fase aktif yang berlaku.
+          Ticker menghitung total akumulasi sejak program dimulai pada 6 Januari
+          2025, dengan laju yang menyesuaikan fase aktif yang berlaku.
         </p>
       </>
     ),
@@ -95,9 +100,10 @@ const FAQ_ITEMS: readonly FaqItem[] = [
     answer: (
       <p>
         Tidak. Angka yang ditampilkan adalah pembagian merata dari anggaran yang
-        dialokasikan (<em>budget allocation</em>), bukan pengeluaran aktual yang sudah
-        terverifikasi. Realisasi anggaran bisa berbeda dari alokasi — bisa lebih
-        rendah (jika program terlambat) atau lebih tinggi (jika ada tambahan alokasi).
+        dialokasikan (<em>budget allocation</em>), bukan pengeluaran aktual yang
+        sudah terverifikasi. Realisasi anggaran bisa berbeda dari alokasi — bisa
+        lebih rendah (jika program terlambat) atau lebih tinggi (jika ada
+        tambahan alokasi).
       </p>
     ),
   },
@@ -106,10 +112,11 @@ const FAQ_ITEMS: readonly FaqItem[] = [
     question: 'Apa itu "/hari MBG"?',
     answer: (
       <p>
-        Satuan ukur buatan untuk membantu memvisualisasikan skala anggaran MBG. Satu
-        /hari MBG setara dengan anggaran harian program MBG pada fase yang berlaku.
-        Saat ini (2026): sekitar Rp 918 Miliar per hari. Satuan ini digunakan pada
-        kartu perbandingan agar skala proyek lain lebih mudah dirasakan.
+        Satuan ukur buatan untuk membantu memvisualisasikan skala anggaran MBG.
+        Satu /hari MBG setara dengan anggaran harian program MBG pada fase yang
+        berlaku. Saat ini (2026): sekitar Rp 918 Miliar per hari. Satuan ini
+        digunakan pada kartu perbandingan agar skala proyek lain lebih mudah
+        dirasakan.
       </p>
     ),
   },
@@ -118,13 +125,11 @@ const FAQ_ITEMS: readonly FaqItem[] = [
     question: "Data perbandingan dari mana?",
     answer: (
       <p>
-        Setiap kartu perbandingan mencantumkan sumber datanya masing-masing. Data
-        dikumpulkan dari laporan media terpercaya seperti Kompas, Tempo, dan sumber
-        resmi terkait — termasuk PUPR, Kemenhub, dan laporan proyek pemerintah.
-        Angka yang digunakan adalah estimasi resmi atau nilai kontrak yang dipublikasikan.
-        Data kebutuhan pokok (beras, telur, bensin) bersumber dari pemantauan harga resmi
-        pemerintah dan media terpercaya. Harga kendaraan dan elektronik (Honda Beat, iPhone)
-        dari situs resmi produsen.
+        Setiap kartu perbandingan mencantumkan sumber datanya masing-masing.
+        Data dikumpulkan dari laporan media terpercaya seperti Kompas, Tempo,
+        dan sumber resmi terkait — termasuk PUPR, Kemenhub, dan laporan proyek
+        pemerintah. Angka yang digunakan adalah estimasi resmi atau nilai
+        kontrak yang dipublikasikan.
       </p>
     ),
   },
@@ -138,7 +143,13 @@ interface AccordionItemProps {
   readonly isLast: boolean;
 }
 
-function AccordionItem({ item, isOpen, onToggle, index, isLast }: AccordionItemProps) {
+function AccordionItem({
+  item,
+  isOpen,
+  onToggle,
+  index,
+  isLast,
+}: AccordionItemProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -224,7 +235,10 @@ export function Methodology() {
   const [openId, setOpenId] = useState<string | null>("cara-hitung");
 
   const headerRef = useRef<HTMLDivElement>(null);
-  const isHeaderInView = useInView(headerRef, { once: true, margin: "-50px 0px" });
+  const isHeaderInView = useInView(headerRef, {
+    once: true,
+    margin: "-50px 0px",
+  });
   const prefersReducedMotion = useReducedMotion();
 
   function handleToggle(id: string) {

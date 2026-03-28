@@ -372,8 +372,8 @@ export function Calculator() {
       const timesFormatted = formatLargeNumber(timesPerDay);
       await shareResult({
         inputLabel: `Gaji: ${formatRupiah(salary)}`,
-        resultLabel: durationText,
-        contextLabel: `Setara ${timesFormatted} gaji bulananmu per hari`,
+        resultLabel: `${durationText} MBG`,
+        contextLabel: `Setara ${timesFormatted}x gaji bulananmu per hari`,
         extraLine: `Perlu bekerja ${formatLargeNumber(yearsToEarnOneDay)} tahun untuk 1 hari MBG`,
       });
     } catch (err) {

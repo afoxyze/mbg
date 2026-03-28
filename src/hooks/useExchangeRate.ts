@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 const FALLBACK_RATE = 16500;
 const API_URL = "https://open.er-api.com/v6/latest/USD";
 const TIMEOUT_MS = 5000;
+const STORAGE_KEY = "mbg-usd-idr";
+const TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export interface ExchangeRateState {
   readonly rate: number;
@@ -17,8 +19,46 @@ interface ExchangeRateApiResponse {
   readonly rates: Record<string, number>;
 }
 
+interface StoredRate {
+  readonly rate: number;
+  readonly timestamp: number;
+}
+
+function loadFromStorage(): ExchangeRateState | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw === null) return null;
+
+    const stored = JSON.parse(raw) as StoredRate;
+    if (typeof stored.rate !== "number" || typeof stored.timestamp !== "number") return null;
+
+    // Expired — discard
+    if (Date.now() - stored.timestamp > TTL_MS) return null;
+
+    return { rate: stored.rate, isLive: true };
+  } catch {
+    return null;
+  }
+}
+
+function saveToStorage(rate: number): void {
+  try {
+    const data: StoredRate = { rate, timestamp: Date.now() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch {
+    // Storage full or unavailable — silent fail
+  }
+}
+
 async function fetchUsdIdr(): Promise<ExchangeRateState> {
   if (cached !== null) return cached;
+
+  // Check localStorage cache first
+  const stored = loadFromStorage();
+  if (stored !== null) {
+    cached = stored;
+    return cached;
+  }
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -40,6 +80,7 @@ async function fetchUsdIdr(): Promise<ExchangeRateState> {
     }
 
     cached = { rate: idrRate, isLive: true };
+    saveToStorage(idrRate);
     return cached;
   } catch {
     // Covers both AbortError (timeout) and network errors

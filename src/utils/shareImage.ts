@@ -229,21 +229,37 @@ export function generateShareImage(data: ShareData): Promise<Blob> {
 
 export async function shareResult(data: ShareData): Promise<void> {
   const shareText = `${data.inputLabel} = ${data.resultLabel} — ${data.contextLabel}`;
+  const shareTitle = "Kalkulator /hari MBG";
 
-  // Use navigator.share() IMMEDIATELY (still in user gesture context).
-  // Must happen before any async work (canvas generation) or the gesture expires.
   if (typeof navigator.share === "function") {
+    // Generate the image blob first so we can attach it as a file
+    const blob = await generateShareImage(data);
+    const file = new File([blob], "hasil-mbg.png", { type: "image/png" });
+
     try {
-      await navigator.share({
-        title: "Kalkulator /hari MBG",
-        text: shareText,
-        url: "https://mbg.afoxyze.dev",
-      });
-      return;
-    } catch {
-      // User cancelled — that's fine, don't fall through to download
-      return;
+      if (navigator.canShare?.({ files: [file] })) {
+        // Mobile with file sharing support — image + text, no URL (image has branding)
+        await navigator.share({
+          files: [file],
+          text: `${shareText}\nhttps://mbg.afoxyze.dev/`,
+        });
+      } else {
+        // Older browser with share but no file support — text + URL only
+        await navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: "https://mbg.afoxyze.dev/",
+        });
+      }
+    } catch (err) {
+      // User cancelled (AbortError) or permission denied (NotAllowedError) — ignore both
+      if (err instanceof DOMException && (err.name === "AbortError" || err.name === "NotAllowedError")) {
+        return;
+      }
+      // Unexpected error — re-throw so callers can surface it
+      throw err;
     }
+    return;
   }
 
   // Desktop: generate image and trigger download
