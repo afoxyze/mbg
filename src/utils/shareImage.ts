@@ -242,7 +242,7 @@ export async function shareResult(data: ShareData): Promise<ShareOutcome> {
     try {
       await navigator.share({
         files: [file],
-        text: `${shareText}\nhttps://mbg.afoxyze.dev/`,
+        text: shareText,
       });
       return "shared";
     } catch (err) {
@@ -266,7 +266,7 @@ export async function shareResult(data: ShareData): Promise<ShareOutcome> {
     setTimeout(() => URL.revokeObjectURL(url), 3000);
 
     // Copy share text to clipboard
-    await navigator.clipboard.writeText(`${shareText}\nhttps://mbg.afoxyze.dev/`);
+    await navigator.clipboard.writeText(shareText);
   } finally {
     if (anchor.parentNode !== null) {
       anchor.parentNode.removeChild(anchor);
