@@ -6,6 +6,7 @@ export interface ShareData {
   readonly resultLabel: string;  // e.g. "27.6 hari MBG"
   readonly contextLabel: string; // e.g. "= 1,8 juta porsi makan bergizi"
   readonly extraLine?: string;   // optional 4th line, triggers compact gaji layout
+  readonly shareText?: string;   // custom text for native share / clipboard (overrides default)
 }
 
 const W = 1200;
@@ -230,7 +231,7 @@ export function generateShareImage(data: ShareData): Promise<Blob> {
 export type ShareOutcome = "shared" | "downloaded" | "cancelled";
 
 export async function shareResult(data: ShareData): Promise<ShareOutcome> {
-  const shareText = `${data.inputLabel} = ${data.resultLabel} — ${data.contextLabel}`;
+  const shareText = data.shareText ?? `${data.inputLabel} = ${data.resultLabel} — ${data.contextLabel}`;
 
   // Generate the image upfront — needed for both mobile share and desktop download
   const blob = await generateShareImage(data);

@@ -361,10 +361,12 @@ export function Calculator() {
       const primaryValue = formatSmartValue(smartUnit.value);
       const unitLabel = `${smartUnit.unit} MBG`;
       const portionsText = formatPortions(amount);
+      const resultText = `${primaryValue} ${unitLabel}`;
       const outcome = await shareResult({
         inputLabel: formatRupiah(amount),
-        resultLabel: `${primaryValue} ${unitLabel}`,
+        resultLabel: resultText,
         contextLabel: `= ${portionsText} makan bergizi`,
+        shareText: `🔥 ${formatRupiah(amount)}? Cuma ${primaryValue} ${smartUnit.unit} buat MBG.\nCek → mbg.afoxyze.dev`,
       });
       if (outcome === "downloaded") {
         showToast("Gambar terunduh, teks tersalin!");
@@ -388,6 +390,7 @@ export function Calculator() {
         resultLabel: durationText,
         contextLabel: `Setara ${timesFormatted}x gaji bulananmu per hari`,
         extraLine: `Perlu bekerja ${formatLargeNumber(yearsToEarnOneDay)} tahun untuk 1 hari MBG`,
+        shareText: `Kerja sebulan gaji ${formatRupiah(salary)}.\nMBG? Cuma butuh ${durationText} aja itu udah abis 💸\nCek → mbg.afoxyze.dev`,
       });
       if (outcome === "downloaded") {
         showToast("Gambar terunduh, teks tersalin!");
