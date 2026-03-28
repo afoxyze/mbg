@@ -1,0 +1,168 @@
+<!doctype html>
+<!--
+  OG Image Template — render this page at 1200×630 and screenshot to produce /public/og-image.png.
+
+  How to generate:
+    1. Open this file in a browser at exactly 1200×630 viewport
+    2. Screenshot the page body
+    3. Save as public/og-image.png
+
+  Or use a headless tool:
+    npx playwright screenshot --viewport-size "1200,630" public/og-image.html public/og-image.png
+
+  Or with Puppeteer:
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1200, height: 630 });
+    await page.goto('file://.../public/og-image.html');
+    await page.screenshot({ path: 'public/og-image.png' });
+-->
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      background: #FFFBF5;
+      font-family: "Segoe UI", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      position: relative;
+    }
+
+    /* Radial glow — coral, top-left */
+    .glow {
+      position: absolute;
+      top: -80px;
+      left: -80px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse at 20% 20%, rgba(229,77,46,0.10), transparent 65%);
+      pointer-events: none;
+    }
+
+    /* Content block — left-aligned, vertically centered */
+    .content {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 100px;
+      right: 100px;
+      padding-left: 36px;
+      border-left: 5px solid #E54D2E;
+    }
+
+    /* "BIAYA MBG" brand row */
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 44px;
+    }
+
+    .live-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #E54D2E;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #1c1917;
+      text-transform: uppercase;
+    }
+
+    /* "ANGGARAN TERPAKAI" label */
+    .section-label {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      color: #a8a29e;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* "Rp" prefix */
+    .currency-prefix {
+      font-size: 28px;
+      font-weight: 400;
+      color: #78716c;
+      margin-bottom: 2px;
+      line-height: 1;
+    }
+
+    /* "150+ Triliun" — hero number */
+    .hero-number {
+      font-size: 108px;
+      font-weight: 900;
+      color: #E54D2E;
+      line-height: 1;
+      letter-spacing: -3px;
+      margin-bottom: 24px;
+    }
+
+    /* Subtitle */
+    .subtitle {
+      font-size: 22px;
+      font-weight: 400;
+      color: #78716c;
+      line-height: 1.4;
+      margin-bottom: 44px;
+      max-width: 700px;
+    }
+
+    /* Footer */
+    .footer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-top: 20px;
+      border-top: 1px solid #E7E0D8;
+    }
+
+    .footer-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #E54D2E;
+      flex-shrink: 0;
+    }
+
+    .footer-url {
+      font-size: 19px;
+      font-weight: 600;
+      color: #78716c;
+    }
+
+    .footer-tagline {
+      font-size: 17px;
+      font-weight: 400;
+      color: #a8a29e;
+      margin-left: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="content">
+    <div class="brand-row">
+      <span class="live-dot"></span>
+      <span class="brand-name">Biaya MBG</span>
+    </div>
+    <div class="section-label">Anggaran Terpakai</div>
+    <div class="currency-prefix">Rp</div>
+    <div class="hero-number">150+ Triliun</div>
+    <div class="subtitle">Program Makan Bergizi Gratis — anggaran<br>terbesar dalam sejarah Indonesia</div>
+    <div class="footer">
+      <span class="footer-dot"></span>
+      <span class="footer-url">mbg.afoxyze.dev</span>
+      <span class="footer-tagline">Visualisasi anggaran MBG</span>
+    </div>
+  </div>
+</body>
+</html>
