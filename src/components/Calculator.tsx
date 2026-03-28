@@ -221,6 +221,12 @@ function RpInput({ id, label, digits, isOverMax, onChange, onClear, inputRef }: 
           value={displayValue}
           onChange={handleInput}
           onKeyDown={handleKeyDown}
+          onFocus={(e) => {
+            // On mobile, scroll input into view when keyboard opens
+            setTimeout(() => {
+              e.target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 300);
+          }}
           placeholder="0"
           autoComplete="off"
           className="min-w-0 flex-1 bg-transparent text-lg sm:text-2xl font-bold tracking-tight outline-none placeholder:opacity-25 font-mono"
