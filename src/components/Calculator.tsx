@@ -389,7 +389,7 @@ export function Calculator() {
         inputLabel: `Gaji: ${formatRupiah(salary)}`,
         resultLabel: durationText,
         contextLabel: `Setara ${timesFormatted}x gaji bulananmu per hari`,
-        extraLine: `Perlu bekerja ${formatLargeNumber(yearsToEarnOneDay)} tahun untuk 1 hari MBG`,
+        extraLine: `Perlu bekerja selama ${formatLargeNumber(yearsToEarnOneDay)} tahun untuk 1 hari MBG`,
         shareText: `Kerja sebulan gaji ${formatRupiah(salary)}.\nMBG? Cuma butuh ${durationText} aja itu udah abis 💸\nCek → mbg.afoxyze.dev`,
       });
       if (outcome === "downloaded") {
