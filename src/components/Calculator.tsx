@@ -159,10 +159,9 @@ function formatDuration(seconds: number): string {
 }
 
 function formatLargeNumber(n: number): string {
-  if (n >= 10_000) return n.toLocaleString("id-ID", { maximumFractionDigits: 0 });
-  if (n >= 1_000)  return n.toLocaleString("id-ID", { maximumFractionDigits: 1 });
-  if (n >= 100)    return n.toFixed(0);
-  if (n >= 10)     return n.toFixed(1);
+  if (n >= 1_000) return n.toLocaleString("id-ID", { maximumFractionDigits: 0 });
+  if (n >= 100)   return n.toFixed(0);
+  if (n >= 10)    return n.toFixed(1);
   return n.toFixed(2);
 }
 
@@ -306,6 +305,7 @@ export function Calculator() {
   const [rawDigits, setRawDigits] = useState("");
   const [salaryDigits, setSalaryDigits] = useState("");
   const [isSharing, setIsSharing] = useState(false);
+  const [shareToast, setShareToast] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const salaryInputRef = useRef<HTMLInputElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -349,6 +349,11 @@ export function Calculator() {
     salaryInputRef.current?.focus();
   }
 
+  function showToast(message: string) {
+    setShareToast(message);
+    setTimeout(() => setShareToast(null), 2500);
+  }
+
   async function handleShare() {
     if (hariMBG === null || smartUnit === null || isSharing) return;
     setIsSharing(true);
@@ -356,13 +361,15 @@ export function Calculator() {
       const primaryValue = formatSmartValue(smartUnit.value);
       const unitLabel = `${smartUnit.unit} MBG`;
       const portionsText = formatPortions(amount);
-      await shareResult({
+      const outcome = await shareResult({
         inputLabel: formatRupiah(amount),
         resultLabel: `${primaryValue} ${unitLabel}`,
         contextLabel: `= ${portionsText} makan bergizi`,
       });
+      if (outcome === "downloaded") {
+        showToast("Gambar terunduh, teks tersalin!");
+      }
     } catch (err) {
-      // User cancelled share or download — not an error worth surfacing in UI
       console.warn("Share cancelled or failed:", err);
     } finally {
       setIsSharing(false);
@@ -376,14 +383,16 @@ export function Calculator() {
       const { secondsToConsumeOneSalary, timesPerDay, yearsToEarnOneDay } = salaryStats;
       const durationText = formatDuration(secondsToConsumeOneSalary);
       const timesFormatted = formatLargeNumber(timesPerDay);
-      await shareResult({
+      const outcome = await shareResult({
         inputLabel: `Gaji: ${formatRupiah(salary)}`,
-        resultLabel: `${durationText} MBG`,
+        resultLabel: durationText,
         contextLabel: `Setara ${timesFormatted}x gaji bulananmu per hari`,
         extraLine: `Perlu bekerja ${formatLargeNumber(yearsToEarnOneDay)} tahun untuk 1 hari MBG`,
       });
+      if (outcome === "downloaded") {
+        showToast("Gambar terunduh, teks tersalin!");
+      }
     } catch (err) {
-      // User cancelled share or download — not an error worth surfacing in UI
       console.warn("Share cancelled or failed:", err);
     } finally {
       setIsSharing(false);
@@ -727,6 +736,26 @@ export function Calculator() {
           }}
         />
       </section>
+
+      {/* Toast — shown on desktop after download + clipboard copy */}
+      <AnimatePresence>
+        {shareToast !== null && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-full px-5 py-2.5 text-sm font-semibold shadow-lg"
+            style={{
+              backgroundColor: "var(--color-card)",
+              color: "var(--color-text)",
+              border: "1px solid var(--color-border)",
+            }}
+          >
+            {shareToast}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

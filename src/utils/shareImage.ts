@@ -227,61 +227,50 @@ export function generateShareImage(data: ShareData): Promise<Blob> {
   });
 }
 
-export async function shareResult(data: ShareData): Promise<void> {
+export type ShareOutcome = "shared" | "downloaded" | "cancelled";
+
+export async function shareResult(data: ShareData): Promise<ShareOutcome> {
   const shareText = `${data.inputLabel} = ${data.resultLabel} — ${data.contextLabel}`;
-  const shareTitle = "Kalkulator /hari MBG";
 
-  if (typeof navigator.share === "function") {
-    // Generate the image blob first so we can attach it as a file
-    const blob = await generateShareImage(data);
-    const file = new File([blob], "hasil-mbg.png", { type: "image/png" });
+  // Generate the image upfront — needed for both mobile share and desktop download
+  const blob = await generateShareImage(data);
+  const file = new File([blob], "hasil-mbg.png", { type: "image/png" });
 
+  // Mobile/desktop with native share + file support
+  if (typeof navigator.share === "function" && navigator.canShare?.({ files: [file] })) {
     try {
-      if (navigator.canShare?.({ files: [file] })) {
-        // Mobile with file sharing support — image + text, no URL (image has branding)
-        await navigator.share({
-          files: [file],
-          text: `${shareText}\nhttps://mbg.afoxyze.dev/`,
-        });
-      } else {
-        // Older browser with share but no file support — text + URL only
-        await navigator.share({
-          title: shareTitle,
-          text: shareText,
-          url: "https://mbg.afoxyze.dev/",
-        });
-      }
+      await navigator.share({
+        files: [file],
+        text: `${shareText}\nhttps://mbg.afoxyze.dev/`,
+      });
+      return "shared";
     } catch (err) {
-      // User cancelled (AbortError) or permission denied (NotAllowedError) — ignore both
       if (err instanceof DOMException && (err.name === "AbortError" || err.name === "NotAllowedError")) {
-        return;
+        return "cancelled";
       }
-      // Unexpected error — re-throw so callers can surface it
       throw err;
     }
-    return;
   }
 
-  // Desktop: generate image and trigger download
+  // Desktop fallback: download image + copy text to clipboard
   const anchor = document.createElement("a");
   anchor.download = "hasil-mbg.png";
   anchor.style.display = "none";
   document.body.appendChild(anchor);
 
   try {
-    const blob = await generateShareImage(data);
-
-    // Trigger PNG download using the pre-attached anchor
     const url = URL.createObjectURL(blob);
     anchor.href = url;
     anchor.click();
-
-    // Revoke object URL after a short delay to allow download to initiate
     setTimeout(() => URL.revokeObjectURL(url), 3000);
+
+    // Copy share text to clipboard
+    await navigator.clipboard.writeText(`${shareText}\nhttps://mbg.afoxyze.dev/`);
   } finally {
-    // Always clean up the anchor element from the DOM
     if (anchor.parentNode !== null) {
       anchor.parentNode.removeChild(anchor);
     }
   }
+
+  return "downloaded";
 }

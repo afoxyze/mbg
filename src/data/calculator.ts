@@ -86,18 +86,25 @@ export function getElapsedTime(now: Date = new Date()): {
 /**
  * Format a Rupiah amount into a human-readable string with appropriate scale suffix.
  */
+function formatCompact(value: number): string {
+  // Remove unnecessary trailing zeros: 10.00 → 10, 5.70 → 5,7, 5.73 → 5,73
+  const fixed = value.toFixed(2);
+  const trimmed = fixed.replace(/\.?0+$/, "");
+  return trimmed;
+}
+
 export function formatRupiah(amount: number): string {
   if (amount >= 1_000_000_000_000_000) {
-    return `Rp ${(amount / 1_000_000_000_000_000).toFixed(2)} Kuadriliun`;
+    return `Rp ${formatCompact(amount / 1_000_000_000_000_000)} Kuadriliun`;
   }
   if (amount >= 1_000_000_000_000) {
-    return `Rp ${(amount / 1_000_000_000_000).toFixed(2)} Triliun`;
+    return `Rp ${formatCompact(amount / 1_000_000_000_000)} Triliun`;
   }
   if (amount >= 1_000_000_000) {
-    return `Rp ${(amount / 1_000_000_000).toFixed(2)} Miliar`;
+    return `Rp ${formatCompact(amount / 1_000_000_000)} Miliar`;
   }
   if (amount >= 1_000_000) {
-    return `Rp ${(amount / 1_000_000).toFixed(2)} Juta`;
+    return `Rp ${formatCompact(amount / 1_000_000)} Juta`;
   }
   return `Rp ${amount.toLocaleString("id-ID")}`;
 }
